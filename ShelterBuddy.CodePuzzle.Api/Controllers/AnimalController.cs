@@ -9,18 +9,20 @@ using ShelterBuddy.CodePuzzle.Core.Entities;
 namespace ShelterBuddy.CodePuzzle.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/api/[controller]")]
 public class AnimalController : ControllerBase
 {
-    private readonly IRepository<Animal, Guid> repository;
+    private readonly IRepository<Animal, Guid> _repository;
+    private readonly IMapper _mapper;
 
-    public AnimalController(IRepository<Animal, Guid> animalRepository)
+    public AnimalController(IRepository<Animal, Guid> animalRepository, IMapper mapper)
     {
-        repository = animalRepository;
+        _repository = animalRepository;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    public AnimalModel[] Get() => repository.GetAll().Select(animal => new AnimalModel
+    public AnimalModel[] Get() => _repository.GetAll().Select(animal => new AnimalModel
     {
         Id = $"{animal.Id}",
         Name = animal.Name,
@@ -38,21 +40,35 @@ public class AnimalController : ControllerBase
     }).ToArray();
 
     [HttpPost]
-    public void Post(AnimalModel newAnimal)
+    public async Task<ActionResult<Animal>> Post(AnimalModel newAnimal)
     {
         try 
         {
-            //Create a new Animal
+            // Custom validation required
+            // DateOfBirth or Age fields must be entered
+            if (string.IsNullOrEmpty(Convert.ToString(newAnimal.DateOfBirth)) && string.IsNullOrEmpty(newAnimal.AgeText))
+            {
+                var validationError = "You must provide either the Date of Birth, or Age fields value(s).";
+                this.ModelState.AddModelError("Date of Birth or Age", validationError); 
+                return BadRequest(validationError);
+            }
+            
+            // Create a new Animal
             var animal = new Animal();
 
-            repository.Add(animal);
+            // Mapper
+            //animal = _mapper.Map(Animal(newAnimal));
 
-            
 
+            _repository.Add(animal);
+
+            //await _repository.SaveChangesAsync();
+
+            return CreatedAtRoute("Test Value", "");
         }
         catch (Exception ex) 
         {
-            
+            return BadRequest(ex.Message);
         }
     }
 }

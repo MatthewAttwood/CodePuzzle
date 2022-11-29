@@ -1,10 +1,15 @@
-﻿namespace ShelterBuddy.CodePuzzle.Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShelterBuddy.CodePuzzle.Core.Entities;
 
 public class Animal : BaseEntity<Guid>
 {
+    [Required(ErrorMessage = "You must provide a name value.")]
     public string? Name { get; set; }
     public string? Colour { get; set; }
     public string? MicrochipNumber { get; set; }
+
+    [Required(ErrorMessage = "You must provide a species value.")]
     public string? Species { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public DateTime? DateInShelter { get; set; }

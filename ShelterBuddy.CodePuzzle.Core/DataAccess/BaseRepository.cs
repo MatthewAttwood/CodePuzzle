@@ -12,7 +12,7 @@ public class BaseRepository<T, TKey> : IRepository<T, TKey>
     private ICollection<T> data = new List<T>();
     private IAuditStamper auditStamper = new AuditStamper();
     
-    protected BaseRepository()
+    public BaseRepository()
     {
     }
 
