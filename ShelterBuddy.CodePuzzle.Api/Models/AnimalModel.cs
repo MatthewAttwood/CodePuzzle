@@ -1,11 +1,17 @@
-﻿namespace ShelterBuddy.CodePuzzle.Api.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShelterBuddy.CodePuzzle.Api.Models;
 
 public class AnimalModel
 {
     public string? Id { get; init; }
+
+    [Required(ErrorMessage = "You must provide a name value.")]
     public string? Name { get; init; }
     public string? Colour { get; init; }
     public string? MicrochipNumber { get; init; }
+
+    [Required(ErrorMessage = "You must provide a species value.")]
     public string? Species { get; init; }
     public DateTime? DateOfBirth { get; init; }
     public DateTime? DateInShelter { get; init; }

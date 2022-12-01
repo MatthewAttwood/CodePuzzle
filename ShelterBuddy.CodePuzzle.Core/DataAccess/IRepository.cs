@@ -10,6 +10,5 @@ public interface IRepository<T, TKey>
     public IQueryable<T> GetAll();
     public void Delete(T entity);
     public void Add(T entity);
-
-    //public Task<bool> SaveChangesAsync();
+    public void Save();
 }

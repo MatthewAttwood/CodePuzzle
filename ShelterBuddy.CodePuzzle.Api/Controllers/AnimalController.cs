@@ -5,6 +5,7 @@ using ShelterBuddy.CodePuzzle.Core.Entities;
 using System.Net;
 using System.Text;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace ShelterBuddy.CodePuzzle.Api.Controllers;
 
@@ -38,35 +39,35 @@ public class AnimalController : ControllerBase
         }).ToArray();
 
     [HttpPost]
-    public async Task<ActionResult<Animal>> Post(AnimalModel newAnimal)
+    public string Post(AnimalModel newAnimal)
     {
-        try 
+        // Custom validation required
+        // DateOfBirth or Age fields must be entered
+        if (string.IsNullOrEmpty(Convert.ToString(newAnimal.DateOfBirth)) && string.IsNullOrEmpty(newAnimal.AgeText))
         {
-            // Custom validation required
-            // DateOfBirth or Age fields must be entered
-            if (string.IsNullOrEmpty(Convert.ToString(newAnimal.DateOfBirth)) && string.IsNullOrEmpty(newAnimal.AgeText))
-            {
-                var validationError = "You must provide either the Date of Birth, or Age fields value(s).";
-                this.ModelState.AddModelError("Date of Birth or Age", validationError); 
-                return BadRequest(validationError);
-            }
-            
-            // Create a new Animal
-            var animal = new Animal();
-
-            // Mapper
-            //animal = _mapper.Map(Animal(newAnimal));
-
-
-            _repository.Add(animal);
-
-            //await _repository.SaveChangesAsync();
-
-            return CreatedAtRoute("Test Value", "");
+            var validationError = "You must provide either the Date of Birth, or Age fields value(s).";
+            this.ModelState.AddModelError("Date of Birth or Age", validationError);
         }
-        catch (Exception ex) 
+        
+        // Mapper (would use automapper in production)
+        var animal = new Animal
         {
-            return BadRequest(ex.Message);
-        }
+            Name = newAnimal.Name ?? null,
+            Colour = newAnimal.Colour ?? null,
+            MicrochipNumber = newAnimal.MicrochipNumber ?? null,
+            Species = newAnimal.Species ?? null,
+            DateOfBirth = newAnimal.DateOfBirth ?? null,
+            DateInShelter = newAnimal.DateInShelter ?? null,
+            DateFound = newAnimal.DateFound ?? null,
+            DateLost = newAnimal.DateLost ?? null,
+            AgeYears = newAnimal.AgeYears ?? null,
+            AgeMonths = newAnimal.AgeMonths ?? null,
+            AgeWeeks = newAnimal.AgeWeeks ?? null
+        };
+
+        _repository.Add(animal);
+        _repository.Save();
+
+        return "Animal added to data source successfully.";
     }
 }

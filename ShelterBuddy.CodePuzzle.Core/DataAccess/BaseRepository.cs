@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Net.Security;
+using System.Reflection;
+using System.Runtime.Versioning;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
 using ShelterBuddy.CodePuzzle.Core.Entities;
@@ -39,26 +41,13 @@ public class BaseRepository<T, TKey> : IRepository<T, TKey>
         }
     }
 
-    protected void Save(string resourceName)
+    public void Save()
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        using (var stream = assembly.GetManifestResourceStream(resourceName))
-        {
-            if (stream != null)
-            {
-                using (var streamReader = new StreamReader(stream))
-                {
-                    var animalsData = streamReader.ReadToEnd();
-                    var animals = JsonConvert.DeserializeObject<T[]>(animalsData);
+        var json = JsonConvert.SerializeObject(data);
 
-                    data.Clear();
-                    foreach (var item in animals)
-                    {
-                        data.Add(item);
-                    }
-                }
-            }
-        }
+        // Really hacky, but ran out of time to research and implement a more industry-standard solution
+        var directory = Path.GetDirectoryName(Directory.GetCurrentDirectory()) + "\\ShelterBuddy.CodePuzzle.Core\\DataAccess\\Data\\Animals.json";
+        File.WriteAllText(directory, json);
     }
 
     public T? GetEntity(TKey id) =>
