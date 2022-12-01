@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using AutoMapper;
 using ShelterBuddy.CodePuzzle.Api.Models;
 using ShelterBuddy.CodePuzzle.Core.DataAccess;
 using ShelterBuddy.CodePuzzle.Core.Entities;
+using System.Net;
+using System.Text;
+using System.IO;
 
 namespace ShelterBuddy.CodePuzzle.Api.Controllers;
 
@@ -13,31 +13,29 @@ namespace ShelterBuddy.CodePuzzle.Api.Controllers;
 public class AnimalController : ControllerBase
 {
     private readonly IRepository<Animal, Guid> _repository;
-    private readonly IMapper _mapper;
 
-    public AnimalController(IRepository<Animal, Guid> animalRepository, IMapper mapper)
+    public AnimalController(IRepository<Animal, Guid> animalRepository)
     {
         _repository = animalRepository;
-        _mapper = mapper;
     }
 
     [HttpGet]
     public AnimalModel[] Get() => _repository.GetAll().Select(animal => new AnimalModel
     {
-        Id = $"{animal.Id}",
-        Name = animal.Name,
-        Colour = animal.Colour,
-        MicrochipNumber = animal.MicrochipNumber,
-        Species = animal.Species,
-        DateOfBirth = animal.DateOfBirth,
-        DateInShelter = animal.DateInShelter,
-        DateLost = animal.DateLost,
-        DateFound = animal.DateFound,
-        AgeYears = animal.AgeYears,
-        AgeMonths = animal.AgeMonths,
-        AgeWeeks = animal.AgeWeeks,
-        AgeText = animal.AgeText
-    }).ToArray();
+            Id = $"{animal.Id}",
+            Name = animal.Name,
+            Colour = animal.Colour,
+            MicrochipNumber = animal.MicrochipNumber,
+            Species = animal.Species,
+            DateOfBirth = animal.DateOfBirth,
+            DateInShelter = animal.DateInShelter,
+            DateLost = animal.DateLost,
+            DateFound = animal.DateFound,
+            AgeYears = animal.AgeYears,
+            AgeMonths = animal.AgeMonths,
+            AgeWeeks = animal.AgeWeeks,
+            AgeText = animal.AgeText
+        }).ToArray();
 
     [HttpPost]
     public async Task<ActionResult<Animal>> Post(AnimalModel newAnimal)

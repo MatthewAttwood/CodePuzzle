@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using AutoMapper;
 using ShelterBuddy.CodePuzzle.Core.DataAccess;
 using ShelterBuddy.CodePuzzle.Core.Entities;
 

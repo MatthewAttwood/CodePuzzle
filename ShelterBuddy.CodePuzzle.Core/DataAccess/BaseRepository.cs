@@ -14,9 +14,32 @@ public class BaseRepository<T, TKey> : IRepository<T, TKey>
     
     public BaseRepository()
     {
+        Load("ShelterBuddy.CodePuzzle.Core.DataAccess.Data.Animals.json");
     }
 
     protected void Load(string resourceName)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        using (var stream = assembly.GetManifestResourceStream(resourceName))
+        {
+            if (stream != null)
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                    var animalsData = streamReader.ReadToEnd();
+                    var animals = JsonConvert.DeserializeObject<T[]>(animalsData);
+
+                    data.Clear();
+                    foreach (var item in animals)
+                    {
+                        data.Add(item);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void Save(string resourceName)
     {
         var assembly = Assembly.GetExecutingAssembly();
         using (var stream = assembly.GetManifestResourceStream(resourceName))
