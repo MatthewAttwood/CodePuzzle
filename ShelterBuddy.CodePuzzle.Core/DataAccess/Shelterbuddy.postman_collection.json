@@ -33,7 +33,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Id\": \"3d82211c-e7d6-4db9-becb-9232518c8e27\",\r\n    \"Name\": \"Test Doge\",\r\n    \"Colour\": \"Yellow\",\r\n    \"MicrochipNumber\": \"9009\",\r\n    \"Species\": \"Dog\",\r\n    \"DateOfBirth\": \"2020-08-01\",\r\n    \"DateInShelter\": \"2022-01-01\"\r\n}",
+					"raw": "{\r\n    \"Id\": \"{{$guid}\",\r\n    \"Name\": \"Test Doge\",\r\n    \"Colour\": \"Yellow\",\r\n    \"MicrochipNumber\": \"9009\",\r\n    \"Species\": \"Dog\",\r\n    \"DateOfBirth\": \"2020-08-01\",\r\n    \"DateInShelter\": \"2022-01-01\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
