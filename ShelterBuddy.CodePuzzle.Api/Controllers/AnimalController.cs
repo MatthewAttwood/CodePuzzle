@@ -45,8 +45,7 @@ public class AnimalController : ControllerBase
         // DateOfBirth or Age fields must be entered
         if (string.IsNullOrEmpty(Convert.ToString(newAnimal.DateOfBirth)) && string.IsNullOrEmpty(newAnimal.AgeText))
         {
-            var validationError = "You must provide either the Date of Birth, or Age fields value(s).";
-            this.ModelState.AddModelError("Date of Birth or Age", validationError);
+            return "You must provide either the Date of Birth, or Age fields value(s).";
         }
         
         // Mapper (would use automapper in production)
